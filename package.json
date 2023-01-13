@@ -1,6 +1,7 @@
 {
     "name": "@nangohq/pizzly",
     "type": "module",
+    "private": true,
     "workspaces": [
         "packages/*"
     ],
