@@ -55,7 +55,7 @@ Then open http://localhost:8000/bin/sample.html in your browser
                         params: JSON.parse(params)
                     };
 
-                    var pizzly = new Pizzly('http://localhost:3003');
+                    var pizzly = new Pizzly('https://pizzly-server.onrender.com');
                     pizzly
                         .auth(providerConfigKey, connectionId, config)
                         .then((result) => {
