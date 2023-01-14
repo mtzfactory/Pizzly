@@ -13,12 +13,31 @@ Then open http://localhost:8000/bin/sample.html in your browser
     <head>
         <meta charset="utf-8" />
         <title>Nango OAuth test page</title>
-        <script type="module" src="/dist/index.js"></script>
+        <!--<script type="module" src="/dist/index.js"></script>-->
+        <!-- ... -->
+        <script>
+            var exports = {};
+        </script>
+        <!-- Necessary hack to import Pizzly's script successfully. -->
+        <script src="https://unpkg.com/@nangohq/pizzly-frontend/dist/index.js"></script>
+        <!-- ... -->
     </head>
     <body>
         <noscript>JavaScript is required to proceed with the authentication.</noscript>
         <h1>Nango OAuth test page</h1>
         <form>
+            <formgroup>
+                <label>Pizzly server url:</label>
+                <input type="text" id="serverUrl" value="https://pizzly-server.onrender.com" />
+            </formgroup>
+            <br />
+            <br />
+            <formgroup>
+                <label>Pizzly secret key:</label>
+                <input type="text" id="secretKey" value="" />
+            </formgroup>
+            <br />
+            <br />
             <formgroup>
                 <label>Provider Configuration Unique Key (choose a friendly unique name, e.g. hubspot_staging):</label>
                 <input type="text" id="providerConfigKey" value="slack" />
@@ -42,29 +61,32 @@ Then open http://localhost:8000/bin/sample.html in your browser
         </div>
 
         <script type="module">
-            import Pizzly from '/dist/index.js';
+            //import Pizzly from '/dist/index.js';
+            import Pizzly from 'https://unpkg.com/@nangohq/pizzly-frontend/dist/index.js';
 
             var link = document.getElementById('connect');
             link.addEventListener(
                 'click',
                 () => {
-                    var providerConfigKey = document.getElementById('providerConfigKey').value;
-                    var connectionId = document.getElementById('connectionId').value;
-                    var params = document.getElementById('params').value;
-                    var config = {
+                    const serverUrl = document.getElementById('serverUrl').value;
+                    const secretKey = document.getElementById('secretKey').value;
+                    const providerConfigKey = document.getElementById('providerConfigKey').value;
+                    const connectionId = document.getElementById('connectionId').value;
+                    const params = document.getElementById('params').value;
+                    const config = {
                         params: JSON.parse(params)
                     };
 
-                    var pizzly = new Pizzly('https://pizzly-server.onrender.com');
+                    const pizzly = new Pizzly(serverUrl);
                     pizzly
                         .auth(providerConfigKey, connectionId, config)
                         .then((result) => {
-                            var resultElement = document.getElementById('result');
+                            const resultElement = document.getElementById('result');
                             resultElement.innerHTML = `SUCCESS: ${JSON.stringify(result)}`;
                         })
                         .catch((error) => {
                             console.log('Error');
-                            var resultElement = document.getElementById('result');
+                            const resultElement = document.getElementById('result');
                             resultElement.innerHTML = `ERROR: ${JSON.stringify(error)}`;
                         });
                 },
